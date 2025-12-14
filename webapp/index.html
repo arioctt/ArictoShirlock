@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>boginerSearch - Профиль</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0e27;
+            min-height: 100vh;
+            color: #ffffff;
+            padding-bottom: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1a1f3a 0%, #0f1429 100%);
+            padding: 24px 20px;
+            padding-top: 50px;
+            border-bottom: 1px solid #1e2338;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            margin-right: 14px;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: -0.3px;
+        }
+
+        .user-info p {
+            font-size: 13px;
+            color: #8b8fa3;
+            font-weight: 500;
+        }
+
+        .balance-section {
+            text-align: center;
+            margin: 24px 0;
+            padding: 20px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .balance-label {
+            font-size: 13px;
+            color: #8b8fa3;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .balance-amount {
+            font-size: 42px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: -1px;
+        }
+
+        .eye-icon {
+            cursor: pointer;
+            opacity: 0.7;
+        }
+
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 0 20px;
+            margin: 20px 0;
+        }
+
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: #1a1f3a;
+            border: 1px solid #252a42;
+            border-radius: 12px;
+            padding: 16px 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: white;
+        }
+
+        .action-btn:hover {
+            background: #252a42;
+            transform: translateY(-2px);
+        }
+
+        .action-btn-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .action-btn-text {
+            font-size: 11px;
+            color: #b8bcc8;
+        }
+
+        .promo-banner {
+            background: linear-gradient(135deg, #2d5a27 0%, #1a3d16 100%);
+            border-left: 4px solid #ff4444;
+            border-radius: 16px;
+            padding: 18px;
+            margin: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .promo-banner:hover {
+            transform: translateX(4px);
+            box-shadow: 0 6px 20px rgba(45, 90, 39, 0.4);
+        }
+
+        .promo-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .promo-icon {
+            font-size: 28px;
+        }
+
+        .promo-text h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .promo-text p {
+            font-size: 11px;
+            color: #b8d4b8;
+        }
+
+        .promo-arrow {
+            font-size: 20px;
+            color: #8b8fa3;
+        }
+
+        .assets-section {
+            padding: 0 20px;
+            margin-top: 20px;
+        }
+
+        .assets-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .assets-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .hide-small {
+            font-size: 12px;
+            color: #8b8fa3;
+            cursor: pointer;
+        }
+
+        .asset-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #151a2e 100%);
+            border: 1px solid #252a42;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .asset-item:hover {
+            background: linear-gradient(135deg, #252a42 0%, #1e2338 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border-color: #667eea;
+        }
+
+        .asset-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .asset-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .asset-info h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .asset-info p {
+            font-size: 11px;
+            color: #8b8fa3;
+        }
+
+        .asset-right {
+            text-align: right;
+        }
+
+        .asset-amount {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .asset-value {
+            font-size: 11px;
+            color: #8b8fa3;
+        }
+
+        .asset-change {
+            font-size: 11px;
+            color: #ff4444;
+        }
+
+        .register-form {
+            padding: 20px;
+            display: none;
+        }
+
+        .register-form.active {
+            display: block;
+        }
+
+        .register-card {
+            background: linear-gradient(135deg, #1a1f3a 0%, #151a2e 100%);
+            border: 1px solid #252a42;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .register-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .register-text {
+            font-size: 14px;
+            color: #8b8fa3;
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 16px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            color: #8b8fa3;
+            margin-bottom: 8px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            background: #0f1429;
+            border: 1px solid #252a42;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #252a42 0%, #1e2338 100%);
+            color: white;
+            margin-top: 12px;
+            border: 1px solid #252a42;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #2d3452 0%, #252a42 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8b8fa3;
+        }
+
+        .error, .success {
+            margin: 20px;
+            padding: 16px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .error.active {
+            display: block;
+            background: #3d1f1f;
+            border: 1px solid #ff4444;
+            color: #ff6666;
+        }
+
+        .success.active {
+            display: block;
+            background: #1f3d1f;
+            border: 1px solid #44ff44;
+            color: #66ff66;
+        }
+
+        .history-item {
+            padding: 14px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #151a2e 100%);
+            border: 1px solid #252a42;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            background: linear-gradient(135deg, #252a42 0%, #1e2338 100%);
+            transform: translateX(4px);
+        }
+
+        .history-query {
+            font-weight: 600;
+            margin-bottom: 4px;
+            font-size: 13px;
+        }
+
+        .history-date {
+            font-size: 11px;
+            color: #8b8fa3;
+        }
+
+        .search-section {
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .search-card {
+            background: linear-gradient(135deg, #1a1f3a 0%, #151a2e 100%);
+            border: 1px solid #252a42;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .search-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .search-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px;
+            background: #0f1429;
+            border: 1px solid #252a42;
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .search-input::placeholder {
+            color: #8b8fa3;
+        }
+
+        .search-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="error" id="error"></div>
+    <div class="success" id="success"></div>
+
+    <!-- Регистрация -->
+    <div class="register-form" id="registerForm">
+        <div class="register-card">
+            <div class="register-title">Регистрация</div>
+            <div class="register-text">
+                Для начала работы необходимо зарегистрироваться. После регистрации вы получите 3 бесплатных запроса!
+            </div>
+            <div class="input-group">
+                <label>Telegram ID</label>
+                <input type="text" id="telegramId" readonly>
+            </div>
+            <button class="btn btn-primary" onclick="register()">Зарегистрироваться</button>
+        </div>
+    </div>
+
+    <!-- Профиль -->
+    <div id="profileContent" style="display: none;">
+        <!-- Header -->
+        <div class="header">
+            <div class="user-profile">
+                <div class="avatar" id="avatar">U</div>
+                <div class="user-info">
+                    <h3 id="userName">Пользователь</h3>
+                    <p id="userTag">@username</p>
+                </div>
+            </div>
+
+            <div class="balance-section">
+                <div class="balance-label">
+                    <span>Всего баланс запросов</span>
+                    <span class="eye-icon" onclick="toggleBalance()">👁</span>
+                </div>
+                <div class="balance-amount" id="balanceDisplay">
+                    <span id="balance">0</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-card">
+                <div class="search-title">
+                    <span>🔍</span>
+                    <span>Поиск информации</span>
+                </div>
+                <div class="search-form">
+                    <input 
+                        type="text" 
+                        id="searchInput" 
+                        class="search-input" 
+                        placeholder="Введите запрос (ФИО, номер, адрес и т.д.)"
+                        onkeypress="handleSearchKeyPress(event)"
+                    >
+                    <button class="search-btn" id="searchBtn" onclick="performSearch()">
+                        Найти
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Promo Banner -->
+        <div class="promo-banner" onclick="openPromo()">
+            <div class="promo-content">
+                <div class="promo-icon">🎁</div>
+                <div class="promo-text">
+                    <h4>Новый год с boginerSearch</h4>
+                    <p>Бесплатные запросы всем активным пользователям!</p>
+                </div>
+            </div>
+            <div class="promo-arrow">→</div>
+        </div>
+
+        <!-- Assets Section -->
+        <div class="assets-section">
+            <div class="assets-header">
+                <div class="assets-title">Активы</div>
+                <div class="hide-small" onclick="toggleSmallBalances()">Скрыть мелкие балансы</div>
+            </div>
+
+            <div id="assetsList">
+                <div class="asset-item">
+                    <div class="asset-left">
+                        <div class="asset-icon" style="background: #26a17b; color: white;">🔍</div>
+                        <div class="asset-info">
+                            <h4>Запросы</h4>
+                            <p id="requestsInfo">0 запросов</p>
+                        </div>
+                    </div>
+                    <div class="asset-right">
+                        <div class="asset-amount" id="requestsBalance">0</div>
+                        <div class="asset-value">Доступно</div>
+                    </div>
+                </div>
+
+                <div class="asset-item">
+                    <div class="asset-left">
+                        <div class="asset-icon" style="background: #667eea; color: white;">📊</div>
+                        <div class="asset-info">
+                            <h4>Статистика</h4>
+                            <p>Всего запросов: <span id="totalRequests">0</span></p>
+                        </div>
+                    </div>
+                    <div class="asset-right">
+                        <div class="asset-amount">—</div>
+                        <div class="asset-value">Информация</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- History -->
+            <div style="margin-top: 24px;">
+                <div class="assets-title" style="margin-bottom: 16px;">История запросов</div>
+                <div id="historyList">
+                    <div class="loading">История запросов пуста</div>
+                </div>
+            </div>
+
+            <button class="btn btn-secondary" onclick="refreshData()">Обновить данные</button>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">Загрузка...</div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+        tg.setHeaderColor('#0a0e27');
+        tg.setBackgroundColor('#0a0e27');
+
+        let userId = tg.initDataUnsafe?.user?.id;
+        let username = tg.initDataUnsafe?.user?.username || 'Не указан';
+        let firstName = tg.initDataUnsafe?.user?.first_name || 'Пользователь';
+        let balanceVisible = true;
+
+        // Инициализация
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!userId) {
+                showError('Не удалось получить ID пользователя');
+                return;
+            }
+
+            document.getElementById('telegramId').value = userId;
+            document.getElementById('avatar').textContent = firstName.charAt(0).toUpperCase();
+            await checkRegistration();
+        });
+
+        async function checkRegistration() {
+            try {
+                const registered = localStorage.getItem(`registered_${userId}`);
+                
+                if (!registered) {
+                    document.getElementById('registerForm').classList.add('active');
+                    document.getElementById('loading').style.display = 'none';
+                } else {
+                    await loadProfile();
+                }
+            } catch (error) {
+                console.error('Ошибка проверки регистрации:', error);
+                showError('Ошибка при проверке регистрации');
+            }
+        }
+
+        async function register() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                
+                const registrationData = {
+                    action: 'register',
+                    user_id: userId,
+                    username: username,
+                    first_name: firstName
+                };
+                
+                if (tg && tg.sendData) {
+                    tg.sendData(JSON.stringify(registrationData));
+                }
+                
+                localStorage.setItem(`registered_${userId}`, 'true');
+                localStorage.setItem(`balance_${userId}`, '3');
+                localStorage.setItem(`totalRequests_${userId}`, '0');
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                showSuccess('Регистрация успешна! Вы получили 3 бесплатных запроса.');
+                document.getElementById('registerForm').classList.remove('active');
+                await loadProfile();
+            } catch (error) {
+                console.error('Ошибка регистрации:', error);
+                showError('Ошибка при регистрации');
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        async function loadProfile() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                
+                const balance = parseInt(localStorage.getItem(`balance_${userId}`) || '0');
+                const totalRequests = parseInt(localStorage.getItem(`totalRequests_${userId}`) || '0');
+                
+                document.getElementById('userName').textContent = firstName + ' #кодер';
+                document.getElementById('userTag').textContent = '@' + username;
+                document.getElementById('balance').textContent = balance;
+                document.getElementById('requestsBalance').textContent = balance;
+                document.getElementById('requestsInfo').textContent = balance + ' запросов';
+                document.getElementById('totalRequests').textContent = totalRequests;
+                
+                // Обновляем состояние кнопки поиска
+                const searchBtn = document.getElementById('searchBtn');
+                if (balance <= 0) {
+                    searchBtn.disabled = true;
+                    searchBtn.textContent = 'Недостаточно запросов';
+                } else {
+                    searchBtn.disabled = false;
+                    searchBtn.textContent = 'Найти';
+                }
+                
+                await loadHistory();
+                
+                document.getElementById('profileContent').style.display = 'block';
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Ошибка загрузки профиля:', error);
+                showError('Ошибка при загрузке профиля');
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+
+        async function loadHistory() {
+            try {
+                const historyList = document.getElementById('historyList');
+                const history = JSON.parse(localStorage.getItem(`history_${userId}`) || '[]');
+                
+                if (history.length === 0) {
+                    historyList.innerHTML = '<div class="loading">История запросов пуста</div>';
+                    return;
+                }
+                
+                historyList.innerHTML = history.slice(0, 10).map(item => `
+                    <div class="history-item">
+                        <div class="history-query">${escapeHtml(item.query)}</div>
+                        <div class="history-date">${new Date(item.date).toLocaleString('ru-RU')}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Ошибка загрузки истории:', error);
+                historyList.innerHTML = '<div class="loading">Ошибка загрузки истории</div>';
+            }
+        }
+
+        function toggleBalance() {
+            balanceVisible = !balanceVisible;
+            const balanceEl = document.getElementById('balance');
+            if (balanceVisible) {
+                balanceEl.textContent = localStorage.getItem(`balance_${userId}`) || '0';
+            } else {
+                balanceEl.textContent = '•••';
+            }
+        }
+
+
+        function openPromo() {
+            sendDataToBot({ action: 'promo' });
+            tg.showAlert('Акция: Получите дополнительные запросы, выполняя задания!');
+        }
+
+        function toggleSmallBalances() {
+            tg.showAlert('Функция скрытия мелких балансов скоро будет доступна!');
+        }
+
+        async function refreshData() {
+            await loadProfile();
+            showSuccess('Данные обновлены');
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('active');
+            setTimeout(() => errorDiv.classList.remove('active'), 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('success');
+            successDiv.textContent = message;
+            successDiv.classList.add('active');
+            setTimeout(() => successDiv.classList.remove('active'), 3000);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function sendDataToBot(data) {
+            if (tg && tg.sendData) {
+                tg.sendData(JSON.stringify(data));
+            }
+        }
+
+        function performSearch() {
+            const searchInput = document.getElementById('searchInput');
+            const searchBtn = document.getElementById('searchBtn');
+            const query = searchInput.value.trim();
+
+            if (!query) {
+                showError('Введите запрос для поиска');
+                return;
+            }
+
+            // Проверяем баланс
+            const balance = parseInt(localStorage.getItem(`balance_${userId}`) || '0');
+            if (balance <= 0) {
+                showError('У вас недостаточно запросов. Получите запросы через задания!');
+                return;
+            }
+
+            // Отправляем запрос в бот
+            const searchData = {
+                action: 'search',
+                user_id: userId,
+                query: query
+            };
+
+            sendDataToBot(searchData);
+
+            // Отключаем кнопку и показываем загрузку
+            searchBtn.disabled = true;
+            searchBtn.textContent = 'Поиск...';
+
+            // Сохраняем в историю
+            const history = JSON.parse(localStorage.getItem(`history_${userId}`) || '[]');
+            history.unshift({
+                query: query,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem(`history_${userId}`, JSON.stringify(history.slice(0, 20)));
+
+            // Уменьшаем баланс
+            localStorage.setItem(`balance_${userId}`, (balance - 1).toString());
+            const totalRequests = parseInt(localStorage.getItem(`totalRequests_${userId}`) || '0');
+            localStorage.setItem(`totalRequests_${userId}`, (totalRequests + 1).toString());
+
+            // Обновляем отображение
+            loadProfile();
+
+            // Очищаем поле ввода
+            searchInput.value = '';
+
+            // Восстанавливаем кнопку через 2 секунды
+            setTimeout(() => {
+                searchBtn.disabled = false;
+                searchBtn.textContent = 'Найти';
+            }, 2000);
+
+            showSuccess('Поиск начат, ожидайте...');
+        }
+
+        function handleSearchKeyPress(event) {
+            if (event.key === 'Enter') {
+                performSearch();
+            }
+        }
+        
+        if (tg && tg.MainButton) {
+            tg.MainButton.setText('Вернуться в бот');
+            tg.MainButton.show();
+            tg.MainButton.onClick(function() {
+                tg.close();
+            });
+        }
+    </script>
+</body>
+</html>
